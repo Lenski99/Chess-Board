@@ -1,41 +1,52 @@
-class KingException(Exception):
-    def __init__(self, message):
-        self.message = message
+from piece import Piece, PieceException
 
 
-class King:
+class King(Piece):
     __in_check = False
-    __pos = []
-    __colour = ''
 
-    def __init__(self, pos, colour):
-        # Checking for valid position
-        if pos[0] not in 'abcdefgh' or pos[1] < 1 or pos[1] > 8:
-            raise KingException('Invalid position')
-        elif colour != 'white' and colour != 'black':
-            raise KingException('Invalid colour')
+    def get_moves(self):
+        moves = []
+        file_index = 'abcdefgh'.index(self.__pos[0])
+        rank_index = self.__pos[1]
 
-        # Setting the values provided
-        self.__pos = pos
-        self.__colour = colour
+        # Check up and left
+        if file_index-1 >= 0 and rank_index+1 <= 8:
+            temp_move = ['abcdefgh'[file_index-1], rank_index+1]
+            moves.append(temp_move)
 
-    def get_pos(self):
-        return self.__pos
+        # Check up
+        if rank_index+1 <= 8:
+            temp_move = [self.__pos[0], rank_index+1]
+            moves.append(temp_move)
 
-    def get_colour(self):
-        return self.__colour
+        # Check up and right
+        if file_index+1 <= 7 and rank_index+1 <= 8:
+            temp_move = ['abcdefgh'[file_index+1], rank_index+1]
+            moves.append(temp_move)
 
-    def validate_move(self, move):
-        file = move[1]
-        rank = move[2]
+        # Check right
+        if file_index+1 <= 7:
+            temp_move = ['abcdefgh'[file_index+1], rank_index]
+            moves.append(temp_move)
 
-        if file not in 'abcdefgh' or rank < 1 or rank > 8:
-            return False
+        # Check down and right
+        if file_index+1 <= 7 and rank_index-1 >= 1:
+            temp_move = ['abcdefgh'[file_index+1], rank_index-1]
+            moves.append(temp_move)
 
-        file_diff = abs('abcdefgh'.index(self.__pos[0]) - 'abcdefgh'.index(file))
-        rank_diff = abs('abcdefgh'.index(self.__pos[1]) - 'abcdefgh'.index(rank))
+        # Check down
+        if rank_index-1 >= 1:
+            temp_move = [self.__pos[0], rank_index-1]
+            moves.append(temp_move)
 
-        if file_diff > 1 or rank_diff > 1 or (file_diff == 0 and rank_diff == 0):
-            return False
-        else:
-            return True
+        # Check down and left
+        if file_index-1 >= 0 and rank_index-1 >= 1:
+            temp_move = ['abcdefgh'[file_index-1], rank_index-1]
+            moves.append(temp_move)
+
+        # Check left
+        if file_index-1 >= 0:
+            temp_move = ['abcdefgh'[file_index-1], rank_index]
+            moves.append(temp_move)
+
+        return moves

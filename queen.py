@@ -1,26 +1,17 @@
-class QueenException(Exception):
-    def __init__(self, message):
-        self.message = message
+from piece import Piece, PieceException
+from rook import Rook
+from bishop import Bishop
 
 
-class Queen:
-    __pos = []
-    __colour = ''
+class Queen(Piece):
+    def get_moves(self):
+        moves = []
 
-    def __init__(self, pos, colour):
-        # Checking for valid position
-        if pos[0] not in 'abcdefgh' or pos[1] < 1 or pos[1] > 8:
-            raise QueenException('Invalid position')
-        elif colour != 'white' and colour != 'black':
-            raise QueenException('Invalid colour')
+        temp_rook = Rook(self.__pos, self.__colour)
+        temp_bishop = Bishop(self.__pos, self.__colour)
 
-        # Setting the values provided
-        self.__pos = pos
-        self.__colour = colour
+        rook_moves = temp_rook.get_moves()
+        bishop_moves = temp_bishop.get_moves()
 
-    def get_pos(self):
-        return self.__pos
-
-    def get_colour(self):
-        return self.__colour
-
+        moves += rook_moves + bishop_moves
+        return moves

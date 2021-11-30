@@ -1,48 +1,73 @@
-class KnightException(Exception):
-    def __init__(self, message):
-        self.message = message
+from piece import Piece, PieceException
 
 
-class Knight:
-    __pos = []
-    __colour = ''
+class Knight(Piece):
+    def get_moves(self):
+        moves = []
+        file_index = 'abcdefgh'.index(self.__pos[0])
+        rank_index = self.__pos[1]
 
-    def __init__(self, pos, colour):
-        # Checking for valid position
-        if pos[0] not in 'abcdefgh' or pos[1] < 1 or pos[1] > 8:
-            raise KnightException('Invalid position')
-        elif colour != 'white' and colour != 'black':
-            raise KnightException('Invalid colour')
+        for i in range(-2, 3, 1):
+            if i == 0:
+                pass
+            elif i == -2:
+                if file_index-2 < 0:
+                    pass
+                else:
+                    if rank_index+1 > 8:
+                        pass
+                    else:
+                        temp_move = ['abcdefgh'[file_index-2], rank_index+1]
+                        moves.append(temp_move)
 
-        # Setting the values provided
-        self.__pos = pos
-        self.__colour = colour
+                    if rank_index-1 < 1:
+                        pass
+                    else:
+                        temp_move = ['abcdefgh'[file_index-2], rank_index-1]
+                        moves.append(temp_move)
+            elif i == -1:
+                if file_index-1 < 0:
+                    pass
+                else:
+                    if rank_index+2 > 8:
+                        pass
+                    else:
+                        temp_move = ['abcdefgh'[file_index-1], rank_index+2]
+                        moves.append(temp_move)
 
-    def get_pos(self):
-        return self.__pos
+                    if rank_index-2 < 1:
+                        pass
+                    else:
+                        temp_move = ['abcdefgh'[file_index-1], rank_index-2]
+                        moves.append(temp_move)
+            elif i == 1:
+                if file_index+1 > 7:
+                    pass
+                else:
+                    if rank_index+2 > 8:
+                        pass
+                    else:
+                        temp_move = ['abcdefgh'[file_index+1], rank_index+2]
+                        moves.append(temp_move)
 
-    def get_colour(self):
-        return self.__colour
+                    if rank_index-2 < 1:
+                        pass
+                    else:
+                        temp_move = ['abcdefgh'[file_index+1], rank_index-2]
+            elif i == 2:
+                if file_index+2 > 7:
+                    pass
+                else:
+                    if rank_index+1 > 8:
+                        pass
+                    else:
+                        temp_move = ['abcdefgh'[file_index+2], rank_index+1]
+                        moves.append(temp_move)
 
-    def validate_move(self, move):
-        file = move[1]
-        rank = move[2]
+                    if rank_index-1 < 1:
+                        pass
+                    else:
+                        temp_move = ['abcdefgh'[file_index+2], rank_index-1]
+                        moves.append(temp_move)
 
-        if file not in 'abcdefgh' or int(rank) < 1 or int(rank) > 8:
-            return False
-
-        file_diff = abs('abcdefgh'.index(self.__pos[0]) - 'abcdefgh'.index(file))
-        rank_diff = abs(self.__pos[1] - int(rank))
-
-        print(file_diff)
-        print(rank_diff)
-
-        if (file_diff == 1 and rank_diff == 2) or (file_diff == 2 and rank_diff == 1) and not (file_diff == 0 and rank_diff == 0):
-            return True
-        else:
-            return False
-
-    def make_move(self, move):
-        self.__pos[0], self.__pos[1] = move[1], int(move[2])
-
-
+            return moves

@@ -1,58 +1,30 @@
-class PawnException(Exception):
-    def __init__(self, message):
-        self.message = message
+from piece import Piece, PieceException
 
 
-class Pawn:
+class Pawn(Piece):
     __moved = False
-    __pos = []
-    __colour = ''
 
-    def __init__(self, pos, colour):
-        # Checking for valid position
-        if pos[0] not in 'abcdefgh' or pos[1] < 1 or pos[1] > 8:
-            raise PawnException('Invalid position')
-        elif colour != 'white' and colour != 'black':
-            raise PawnException('Invalid colour')
+    def get_moves(self):
+        moves = []
+        file = self.__pos[0]
+        rank = self.__pos[1]
 
-        # Setting the values provided
-        self.__pos = pos
-        self.__colour = colour
+        # If white, increase rank
+        if self.__colour == 'white':
+            temp_move = [file, rank+1]
+            moves.append(temp_move)
 
-    def get_pos(self):
-        return self.__pos
+            if not self.__moved:
+                temp_move = [file, rank+2]
+                moves.append(temp_move)
 
-    def get_colour(self):
-        return self.__colour
+        # If black, decrease rank
+        else:
+            temp_move = [file, rank-1]
+            moves.append(temp_move)
 
-    def get_moved(self):
-        return self.__moved
+            if not self.__moved:
+                temp_move = [file, rank-2]
+                moves.append(temp_move)
 
-
-if __name__ == '__main__':
-    try:
-        Pawn(['t', 1], 'white')
-    except PawnException as pe:
-        print(pe.message)
-
-    try:
-        Pawn(['a', 0], 'white')
-    except PawnException as pe:
-        print(pe.message)
-
-    try:
-        Pawn(['a', 9], 'white')
-    except PawnException as pe:
-        print(pe.message)
-
-    try:
-        Pawn(['a', 2], 'blue')
-    except PawnException as pe:
-        print(pe.message)
-
-    try:
-        a = Pawn(['a', 2], 'white')
-        print(a.get_pos())
-        print(a.get_colour())
-    except PawnException as pe:
-        print(pe.message)
+        return moves

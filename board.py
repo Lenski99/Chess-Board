@@ -79,20 +79,3 @@ class Board:
                 else:
                     print('0', end=' ')
             print('\n', end='')
-
-    def test_move(self):
-        move = 'Ni2'
-        piece = self.__board[0][1]
-
-        print(piece.validate_move(move))
-
-        piece.make_move(move)
-        self.__board[0][1] = None
-        self.__add_piece(piece)
-
-
-if __name__ == '__main__':
-    b = Board()
-    b.display_command_line()
-    b.test_move()
-    b.display_command_line()

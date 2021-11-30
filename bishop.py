@@ -1,40 +1,54 @@
-class BishopException(Exception):
-    def __init__(self, message):
-        self.message = message
+from piece import Piece, PieceException
 
 
-class Bishop:
-    __pos = []
-    __colour = ''
+class Bishop(Piece):
+    def get_moves(self):
+        moves = []
+        file_index = 'abcdefgh'.index(self.__pos[0])
+        rank_index = self.__pos[1]
 
-    def __init__(self, pos, colour):
-        # Checking for valid position
-        if pos[0] not in 'abcdefgh' or pos[1] < 1 or pos[1] > 8:
-            raise BishopException('Invalid position')
-        elif colour != 'white' and colour != 'black':
-            raise BishopException('Invalid colour')
+        # Checking up and right from current position
+        for i in range(8):
+            if i == 0:
+                pass
+            else:
+                if file_index+i > 7 or rank_index+i > 8:
+                    break
+                else:
+                    temp_move = ['abcdefgh'[file_index+i], rank_index+i]
+                    moves.append(temp_move)
 
-        # Setting the values provided
-        self.__pos = pos
-        self.__colour = colour
+        # Checking down and right from current position
+        for j in range(8):
+            if j == 0:
+                pass
+            else:
+                if file_index+j > 7 or rank_index-j < 1:
+                    break
+                else:
+                    temp_move = ['abcdefgh'[file_index+j], rank_index-j]
+                    moves.append(temp_move)
 
-    def get_pos(self):
-        return self.__pos
+        # Checking down and left from current position
+        for k in range(8):
+            if k == 0:
+                pass
+            else:
+                if file_index-k < 0 or rank_index-k < 1:
+                    break
+                else:
+                    temp_move = ['abcdefgh'[file_index-k], rank_index-k]
+                    moves.append(temp_move)
 
-    def get_colour(self):
-        return self.__colour
+        # Checking up and left
+        for l in range(8):
+            if l == 0:
+                pass
+            else:
+                if file_index-l < 0 or rank_index+l > 8:
+                    break
+                else:
+                    temp_move = ['abcdefgh'[file_index-l], rank_index+l]
+                    moves.append(temp_move)
 
-    def validate_move(self, move):
-        file = move[1]
-        rank = move[2]
-
-        if file not in 'abcdefgh' or rank < 1 or rank > 8:
-            return False
-
-        file_diff = abs('abcdefgh'.index(self.__pos[0]) - 'abcdefgh'.index(file))
-        rank_diff = abs('abcdefgh'.index(self.__pos[1]) - 'abcdefgh'.index(rank))
-
-        if rank_diff == file_diff and not (file_diff == 0 and rank_diff == 0):
-            return True
-        else:
-            return False
+        return moves
